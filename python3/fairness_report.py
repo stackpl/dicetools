@@ -375,39 +375,40 @@ def fairness_report(diceset):
         print('**************')
         print('* OK,  FAIR! *')
         print('**************')
-        d1 = str(sorted(diceset[0]))
+
+        d1 = (str(sorted(diceset[0]))[1:-1]).replace(' ', '')  # get 1,4,8,12,14,16
         h1 = hashlib.blake2b(digest_size=8)
         h1.update(d1.encode('utf-8'))
-        d1 += '  #' + h1.hexdigest()
+        #d1 += '    #' + h1.hexdigest().upper()
 
-        d2 = str(sorted(diceset[1]))
+        d2 = (str(sorted(diceset[1]))[1:-1]).replace(' ', '')
         h2 = hashlib.blake2b(digest_size=8)
         h2.update(d2.encode('utf-8'))
-        d2 += '  #' + h2.hexdigest()
+        #d2 += '    #' + h2.hexdigest().upper()
 
         if len(diceset) >= 3:
-            d3 = str(sorted(diceset[2]))
+            d3 = (str(sorted(diceset[2]))[1:-1]).replace(' ', '')
             h3 = hashlib.blake2b(digest_size=8)
             h3.update(d3.encode('utf-8'))
-            d3 += '  #' + h3.hexdigest()
+            #d3 += '    #' + h3.hexdigest().upper()
 
         if len(diceset) >= 4:
-            d4 = str(sorted(diceset[3]))
+            d4 = (str(sorted(diceset[3]))[1:-1]).replace(' ', '')
             h4 = hashlib.blake2b(digest_size=8)
             h4.update(d4.encode('utf-8'))
-            d4 += '  #' + h4.hexdigest()
+            #d4 += '    #' + h4.hexdigest().upper()
 
         if len(diceset) >= 5:
-            d5 = str(sorted(diceset[4]))
+            d5 = (str(sorted(diceset[4]))[1:-1]).replace(' ', '')
             h5 = hashlib.blake2b(digest_size=8)
             h5.update(d5.encode('utf-8'))
-            d5 += '  #' + h5.hexdigest()
+            #d5 += '    #' + h5.hexdigest().upper()
         
         if len(diceset) >= 6:
-            d6 = str(sorted(diceset[5]))
+            d6 = (str(sorted(diceset[5]))[1:-1]).replace(' ', '')
             h6 = hashlib.blake2b(digest_size=8)
             h6.update(d6.encode('utf-8'))
-            d6 += '  #' + h6.hexdigest()
+            #d6 += '    #' + h6.hexdigest().upper()
 
         #calculate digest identifier of found combination
         h_set = hashlib.blake2b(digest_size=8)
@@ -420,20 +421,19 @@ def fairness_report(diceset):
         if len(diceset) >= 5:    
             h_set.update(h5.digest())
 
-        res = 'Dice1: ' + d1 + '\nDice2: ' + d2 + '\n'
+        res = d1 + '\n' + d2 + '\n'
         if len(diceset) >= 3:
-            res += 'Dice3: ' + d3 + '\n'
+            res += d3 + '\n'
         if len(diceset) >= 4:
-            res += 'Dice4: ' + d4 + '\n'
+            res += d4 + '\n'
         if len(diceset) >= 5:
-            res += 'Dice5: ' + d5 + '\n'
+            res += d5 + '\n'
         if len(diceset) >= 6:
-            res += 'Dice6: ' + d6 + '\n'
+            res += d6 + '\n'
 
         # save found result to file
-        f = open('found.' + h_set.hexdigest() + '.txt', 'w')
+        f = open('found.' + str(len(diceset)) + 'xD' + str(len(diceset[0])) + '.' + h_set.hexdigest().upper() + '.txt', 'w')
         f.write(res)
-        f.write(' UID: ' + h_set.hexdigest() + '\n')
         f.close()
 
         #print(res)
@@ -476,9 +476,8 @@ def fairness_report(diceset):
 
 if __name__ == '__main__':
     diceset = [
-        [ 1, 8, 11, 14, 19, 22, 27, 30, 35, 38, 41, 48 ],
-        [ 2, 7, 10, 15, 18, 23, 26, 31, 34, 39, 42, 47 ],
-        [ 3, 6, 12, 13, 17, 24, 25, 32, 36, 37, 43, 46 ],
-        [ 4, 5, 9, 16, 20, 21, 28, 29, 33, 40, 44, 45 ]
+        [ 1, 6, 8, 11, 15, 16 ],
+        [ 2, 5, 7, 12, 14, 17 ],
+        [ 3, 4, 9, 10, 13, 18 ]
     ]
     fairness_report(diceset)
