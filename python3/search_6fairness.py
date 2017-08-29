@@ -1,14 +1,15 @@
 import itertools
 import sys
-sys.path.append('.')
 import time
 import datetime
+from multiprocessing import Process
 import fairness
 
+sys.path.append('.')
+
 currfile = 'current6.txt'
+endfile = 'end6.txt'
 statfile = 'statlog6.txt'
-
-
 
 def consume(iterator, n):
     "Advance the iterator n-steps ahead. If n is none, consume entirely."
@@ -44,6 +45,8 @@ def log(cntA, cntB, cntC, cntD, cntE, cntF, cnt):
     fcur.write(str(cntE) + '\n')
     fcur.write(str(cntF) + '\n')
     fcur.close()
+
+
 
 #init vectors
 a = [1, 2, 3, 4, 5, 6]
@@ -161,6 +164,10 @@ else:
     startcntF = int(fc.readline())
     fc.close()
 
+    fc = open(endfile, 'r')
+    end = int(fc.readline())
+    fc.close()
+
 '''
 genA = itertools.permutations(a)
 consume(genA, startcntA)
@@ -253,13 +260,19 @@ print('PERMUTATION ' + str(cnt) + '/' + str(cntEnd) + ' RESTORED')
 
 #log(cntA, cntB, cntC, cntD, cntE, cntF, cnt)
 
-# 4,4,4,4,4,4
 for va in genA:
     for vb in genB:
         for vc in genC:
+            if cntC >= end:
+                log(cntA, cntB, cntC, cntD, cntE, cntF, cnt)
+                print('END COUNTER (' + str(cntC) + ') REACHED') 
+                sys.exit(0)
             for vd in genD:
                 for ve in genE:
-                    log(cntA, cntB, cntC, cntD, cntE, cntF, cnt)
+
+                    if cntE % 6 == 0:
+                        log(cntA, cntB, cntC, cntD, cntE, cntF, cnt)
+
                     for vf in genF:
                         diceset = [
                             [ va[0], vb[0], vc[0], vd[0], ve[0], vf[0], 61-vf[0], 61-ve[0], 61-vd[0], 61-vc[0], 61-vb[0], 61-va[0] ],
